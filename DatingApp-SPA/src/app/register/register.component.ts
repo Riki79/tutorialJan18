@@ -1,4 +1,5 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { AuthService } from '../_services/auth.service';
 
 @Component({
   selector: 'app-register',
@@ -6,8 +7,10 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./register.component.css']
 })
 export class RegisterComponent implements OnInit {
+  @Output() cancelRegister = new EventEmitter();
 
-  constructor() { }
+
+  constructor(private _authService: AuthService) { }
 
 
   model: any = {};
@@ -15,10 +18,14 @@ export class RegisterComponent implements OnInit {
   }
 
   register() {
-    console.log(this.model);
+    this._authService.register(this.model).subscribe(() => {
+      console.log('registeration Successful');
+    }, error => {
+      console.log(error);
+    });
   }
 
   cancel() {
-    console.log('Cancel');
+    this.cancelRegister.emit(false);
   }
 }
