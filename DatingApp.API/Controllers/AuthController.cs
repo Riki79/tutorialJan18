@@ -52,7 +52,7 @@ namespace DatingApp.API.Controllers
     {
         var userFromRepo = await _repo.Login(userForLoginDto.Username.ToLower(), userForLoginDto.Password);
         //Validate User exists
-        if (userForLoginDto == null)
+        if (userFromRepo == null)
         {
             return Unauthorized();
         };
