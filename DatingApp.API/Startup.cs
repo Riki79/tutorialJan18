@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using DatingApp.API.Data;
 using DatingApp.API.Helpers;
 using DatingApp.API.Interfaces;
@@ -37,11 +38,17 @@ namespace DatingApp.API
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<DataContext>(x => x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+            .AddJsonOptions(opt => {
+                opt.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;        // This is being added to override a circular reference erro whcih doesnt actually exist
+            });
             services.AddCors();
+            services.AddAutoMapper();
+            services.AddTransient<Seed>();
             //services.AddSingleton() //Creates a single instance for the application, no good for concurrent requests
             //services.AddTransient() //Creates a new instance everytime this is called, use for lightweight small services
             services.AddScoped<IAuthRepository, AuthRepository>(); //Creates once per scope, use for session stylie stuff
+            services.AddScoped<IDatingRepository, DatingRepository>();
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>{
                     options.TokenValidationParameters = new TokenValidationParameters() {
@@ -54,7 +61,7 @@ namespace DatingApp.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, Seed seeder)
         {
             if (env.IsDevelopment())
             {
@@ -80,6 +87,8 @@ namespace DatingApp.API
             }
             //RT : Removed to take out security
             //app.UseHttpsRedirection();
+            //removed as only needed on inital seed
+            //seeder.SeedUsers();
             app.UseCors(x => x.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
             app.UseAuthentication();
             app.UseMvc();
