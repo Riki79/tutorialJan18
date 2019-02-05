@@ -5,13 +5,19 @@ import { MessagesComponent } from './messages/messages.component';
 import { ListsComponent } from './lists/lists.component';
 import { AuthGuard } from './_guards/auth.guard';
 import { MemberDetailComponent } from './members/member-detail/member-detail.component';
+import { MemberDetailResolver } from './_resolvers/member-detail-resolver';
+import { MemberListResolver } from './_resolvers/member-list-resolver';
 
 export const appRoutes: Routes = [
         { path: '', component: HomeComponent },
         // Example of guarding a list of routes
-        { path: '', runGuardsAndResolvers: 'always', canActivate: [AuthGuard], children: [
-                { path: 'members', component: MemberListComponent},
-                { path: 'members/:id', component: MemberDetailComponent},         // Adding the :id will defines a route parameter
+        { path: '', runGuardsAndResolvers: 'always',
+                canActivate: [AuthGuard],
+                children: [
+                { path: 'members', component: MemberListComponent,
+                resolve: {users: MemberListResolver}},
+                { path: 'members/:id', component: MemberDetailComponent,
+                        resolve: {user: MemberDetailResolver}},         // Adding the :id will defines a route parameter
                 { path: 'messages', component: MessagesComponent}
         ]},
         // Example of guarding a single route
