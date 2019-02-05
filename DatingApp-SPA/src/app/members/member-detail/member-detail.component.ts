@@ -20,7 +20,7 @@ export class MemberDetailComponent implements OnInit {
 
   ngOnInit() {
     // If I was getting this data while the page was loading it would come up with errors (as the this.userobject would be null)
-    // now I'm using the router which has a resolver the user details are being got before the page is loaded, thus user should not be null.
+    // now I'm using the route resolver which loads user details are being got before the route is activated, thus user should not be null.
     this._route.data.subscribe(data => {
       this.user = data['user'];
     });
