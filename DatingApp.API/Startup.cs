@@ -88,7 +88,7 @@ namespace DatingApp.API
             //RT : Removed to take out security
             //app.UseHttpsRedirection();
             //removed as only needed on inital seed
-            seeder.SeedUsers();
+            //seeder.SeedUsers();
             app.UseCors(x => x.AllowAnyHeader().AllowAnyOrigin().AllowAnyMethod());
             app.UseAuthentication();
             app.UseMvc();

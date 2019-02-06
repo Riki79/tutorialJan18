@@ -9,7 +9,7 @@ namespace DatingApp.API.Interfaces
     {
          void Add<T>(T entity) where T: class;
          void Delete<T>(T entity) where T: class;
-        Task<bool> SaveAll<T>(T entity) where T: class;
+        Task<bool> SaveAll();
 
         Task<IEnumerable<UserModel>> GetUsers();
         Task<UserModel> GetUser(int id);

@@ -39,7 +39,7 @@ namespace DatingApp.API.Repository
             return user;
         }
 
-        public async Task<bool> SaveAll<T>(T entity) where T : class
+        public async Task<bool> SaveAll()
         {
             return await _context.SaveChangesAsync() > 0;
             

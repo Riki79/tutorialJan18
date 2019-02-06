@@ -22,4 +22,9 @@ constructor(private _http: HttpClient) { }
     return this._http.get<User>(this.baseUrl + 'users/' + id.toString());
   }
 
+  updateUser(id: number, user: User) {
+    console.log('Usaer', user);
+    return this._http.put(this.baseUrl + 'users/' + id, user);
+  }
+
 }
